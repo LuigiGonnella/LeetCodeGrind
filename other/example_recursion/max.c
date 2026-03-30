@@ -12,7 +12,7 @@ int find_max_el(int* vec, int l, int r) {
     }
 
     int m = (l + r) / 2;
-    printf("SX (%d, %d) :", l, r);
+    printf("GO TO LEFT (%d, %d) FROM :", l, m);
     for (int i = l; i < r; i++) {
         printf("%d ", vec[i]);
     }
@@ -21,8 +21,8 @@ int find_max_el(int* vec, int l, int r) {
     u = find_max_el(vec, l, m);
     printf(" -- > %d\n", u);
 
-    printf("DX (%d, %d) :", l, r);
-    for (int i = l; i < r; i++) {
+    printf("GO TO RIGHT (%d, %d) FROM :", m + 1, r);
+    for (int i = l; i <= r; i++) {
         printf("%d ", vec[i]);
     }
     printf("\n");
