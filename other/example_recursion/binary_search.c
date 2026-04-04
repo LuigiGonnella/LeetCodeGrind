@@ -17,11 +17,11 @@ int bin_search(int* vec, int l, int r, int k) {
     }
 
     if (vec[m] > k) {
-        return bin_search(vec, l, m, k); 
+        return bin_search(vec, l, m - 1, k); 
         
     }
 
-    return bin_search(vec, m+1, r, k);
+    return bin_search(vec, m + 1, r, k);
 
     
 }
@@ -35,3 +35,5 @@ int main() {
     return 0;
 }
 
+//SE USO l>r come condizione di terminazione, allora NON posso usare r=len inizialmente, dato che l > r si riferisce ad un intervallo CHIUSO [l;r]
+//SE INVECE USO l >= r, allora posso usare all'inizio r=len e ricorrere a SX con l, m e a DX con m + 1,r (in m accedo nella chiamata corrente)
