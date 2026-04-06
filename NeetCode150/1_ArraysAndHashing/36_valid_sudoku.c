@@ -113,10 +113,7 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize) {
 //THIS IS O(3*N^2) = three passes reading all cells (still O(N^2) in big o notation)
 
 //SOLUTION WITH ONLY 1 PASS --> "pure" O(N^2)
-#define DIM 9
-//...
 
-//THIS WAS O(N^3) with 3 passes, now we implement O(N^2) with only one pass
 typedef struct Element {
     int val;
     struct Element* next;
