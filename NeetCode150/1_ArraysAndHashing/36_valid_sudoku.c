@@ -1,4 +1,8 @@
 #define DIM 9
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 bool checkRow(char** board, int row, int col, int occurs[]) {
     if (col >= DIM) {
