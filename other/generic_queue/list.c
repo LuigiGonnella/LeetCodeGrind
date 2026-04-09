@@ -33,7 +33,6 @@ int main() {
         Node* t = q -> tail -> next;
         Node* new_tail = NEW(val, NULL);
         q -> tail -> next = new_tail;
-        free(t);
 
         q -> tail = new_tail;
     }
