@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+//we could have do this without linked list stack, just with a char vector and a pointer to top (to save memory)
 typedef struct Item {
     char type;
     struct Item* next;
