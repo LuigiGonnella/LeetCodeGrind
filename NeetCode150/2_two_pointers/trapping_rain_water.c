@@ -39,3 +39,37 @@ int trap(int* height, int heightSize) {
 }
 
 //! WATER AT EACH INDEX --> OPTIMAL O(N)
+//TWO POINTERS SOLUTION
+
+int max(int a , int b) {
+    if (a > b) return a;
+
+    return b;
+}
+
+int trap(int* height, int heightSize) {
+    int l = 0, r = heightSize - 1;
+    int left_height, right_height;
+    int tot_water = 0;
+
+    left_height = height[l];
+    right_height = height[r];
+    while (l < r) {
+        if (left_height < right_height) {
+            l++;
+            left_height = max(left_height, height[l]);
+            tot_water += (left_height - height[l]);
+            
+            
+        }
+        else {
+            r--;
+            right_height = max(right_height, height[r]);
+            tot_water += (right_height - height[r]);
+        }
+
+    }
+
+    return tot_water;
+
+}
