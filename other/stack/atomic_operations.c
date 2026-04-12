@@ -14,6 +14,7 @@ typedef struct Node {
 
 
 
+
 int main() { 
    
     struct stack { //!we can implement it with VECTOR or LIST
@@ -29,7 +30,7 @@ int main() {
     }
 
     STACK STACKinit() {
-        STACK s = malloc(sizeof(*STACK));
+        STACK s = malloc(sizeof(*s));
         s-> head = NULL;
     }
 
