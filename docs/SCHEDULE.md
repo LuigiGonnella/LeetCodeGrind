@@ -1,9 +1,9 @@
-## THEORY: 9) Tipi di dato astratto-Cab (QUEUES and TABELLE DI SIMBOLI) + 17) Tabelle di Hash-Cab
+## THEORY: 9) Tipi di dato astratto-Cab (QUEUES and TABELLE DI SIMBOLI) + 17) Tabelle di Hash-Cab ✅
 ### NEETCODE150: 
-    TWO POINTERS
-    STACK
+    TWO POINTERS ✅
+    STACK ✅
 
-## THEORY: 13) Alberi binari di ricerca
+## THEORY: 13) Alberi binari di ricerca ⌛
 ### NEETCODE150: 
     BINARY SEARCH
     SLIDING WINDOW
