@@ -102,3 +102,34 @@ class Solution:
 // Se nums[m] >= nums[l]: La metà sinistra è perfettamente ordinata e sale costantemente. Non c'è nessun salto qui. Vai a cercare il minimo a destra (l = m + 1).
 
 // Se nums[m] < nums[l] (il tuo else): C'è un'anomalia. I numeri sono scesi. Il salto (e quindi il minimo) è rimasto intrappolato nella metà sinistra. Vai a cercare a sinistra (r = m - 1).
+
+
+//!OPPURE OGNI VOLTA COMPARO IL MIDDLE CON IL RIGHT, SE < ALLORA VADO A SINISTRA (CERCO UNO ANCORA MINORE), ALTRIMENTI VADO A DESTRA (RIGHT E PIU PICCOLO QUINDI IL MINIMO SARA A DESTRA)
+//finiro quando mi rimane solo un elemento, ovvero il minimo, infatti faccio while con l<r e NON l<=r 
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+        while l < r:
+            m = l + (r - l) // 2
+            if nums[m] < nums[r]:
+                r = m
+            else:
+                l = m + 1
+        return nums[l]
+        
+//oppure tengo traccia del minimo e faccio il while con l<=r come sempre, ritornando l'ultimo minimo trovato
+
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+        minNum = nums[0]
+        while l <= r:
+            m = l + (r - l) // 2
+            minNum= min(minNum, nums[m])
+            if nums[m] < nums[r]:
+                r = m - 1
+            else:
+                l = m + 1
+
+        return minNum
