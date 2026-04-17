@@ -488,11 +488,11 @@ link BSTpartition(link h, int r) {
 
     if (t > r) {
         h -> l = BSTpartition(h -> l, r);
-        rotR(h);
+        h = rotR(h);
     }
     else if (t < r) {
         h -> r = BSTpartition(h -> r, r);
-        rotL(h);
+        h = rotL(h);
     }
 
     return h;
@@ -504,7 +504,7 @@ link joinR(link left_root, link right_root) {
     }
 
     right_root = BSTpartition(right_root, 0); //succ at root
-    right_root -> r = left_root;
+    right_root -> l = left_root;
 
     left_root -> p = right_root;
     right_root -> N = right_root -> r -> N + left_root -> N + 1;
@@ -548,4 +548,179 @@ link balanceR(link h) {
     h -> r = balanceR(h -> r);
 
     return h;
+}
+
+//! INTERVAL BST
+
+typedef struct IntervalItem {
+    int low;
+    int high;
+} IntervalItem;
+struct BSTNode {
+    IntervalItem item;
+    link l;
+    link r;
+    link p;
+    int maxR; //maximum value of right extreme in all children
+    int N; //number of children
+};
+
+typedef struct BSTNode* link;
+
+link IBSTNewNode(IntervalItem item, int N, int maxR) {
+    link node = malloc(sizeof(*node));
+    node -> l = NULL;
+    node -> r = NULL;
+    node -> p = NULL;
+    node -> item = item;
+    node -> maxR = maxR;
+    node -> N = N;
+
+    return node;
+
+}
+
+bool IntervalItemLess(IntervalItem item1, IntervalItem item2) {
+    if (item1.high <= item2.low) {
+        return true;
+    }
+    return false;
+}
+
+int maxEl(int a, int b, int c) {
+    int m = a;
+    if (b > m) {
+        m = b;
+    } 
+    if (c > m) {
+        m = c;
+    }
+    return m;
+    
+}
+
+link IBSTinsertR(link h, IntervalItem item) {
+    if (h == NULL) {
+        return IBSTNewNode(item, 1, item.high);
+    }
+
+    if (IntervalItemLess(item, h->item)) {
+        h -> l = IBSTinsertR(h -> l, item);
+        h -> maxR = maxEl(h -> maxR, h -> l -> maxR, h -> r -> maxR);
+    }
+    else {
+        h -> r = IBSTinsertR(h -> r, item);
+        h -> maxR = maxEl(h -> maxR, h -> l -> maxR, h -> r -> maxR);
+    }
+    //in any case, increase N
+    h -> N++;
+    return h;
+}
+
+link IBSTrotR(link h) {
+    link new_h = h -> l;
+    h -> l = new_h -> r;
+    new_h -> r = h;
+
+
+    new_h -> N = h -> N;
+    h -> N = 1;
+    h -> N += (h -> l) ? h -> l -> N : 0;
+    h -> N += (h -> r) ? h -> r -> N : 0;
+    h -> maxR =  maxEl(h -> item.high, h -> l -> maxR, h -> r -> maxR);
+    new_h -> maxR =  maxEl(new_h -> item.high, new_h -> l -> maxR, new_h -> r -> maxR);
+    return new_h;
+}
+
+link IBSTrotL(link h) {
+    link new_h = h -> r;
+    h -> r = new_h -> l;
+    new_h -> l =  h;
+
+    new_h -> N = h -> N;
+    h -> N = 1;
+    h -> N += (h -> l) ? h -> l -> N : 0;
+    h -> N += (h -> r) ? h -> r -> N : 0;
+    h -> maxR =  maxEl(h -> item.high, h -> l -> maxR, h -> r -> maxR);
+    new_h -> maxR =  maxEl(new_h -> item.high, new_h -> l -> maxR, new_h -> r -> maxR);
+    return new_h;
+}
+
+
+link IBSTpartition(link h, int r) {
+    int t = h -> l -> N;
+
+    if (t > r) {
+        h -> l = IBSTpartition(h -> l, r);
+        h = IBSTrotR(h);
+    }
+    else if (t < r) {
+        h -> r = IBSTpartition(h -> r, r);
+        h = IBSTrotL(h);
+    }
+
+    return h;
+}
+
+link IBSTjoinR(link left_root, link right_root) {
+    if (right_root == NULL) {
+        return left_root;
+    }
+
+    right_root = IBSTpartition(right_root, 0); //succ at root
+    right_root -> l = left_root;
+
+    right_root -> N = right_root -> r -> N + left_root -> N + 1;
+    right_root -> maxR =  maxEl(right_root -> item.high, right_root -> l -> maxR, right_root -> r -> maxR);
+    return right_root;
+}
+
+link IBSTdeleteR(link h, IntervalItem item) {
+    link y, p;
+
+    if (h == NULL) {
+        return NULL;
+    }
+
+    if (IntervalItemLess(item, h -> item)) {
+        h -> l = IBSTdeleteR(h -> l, item);
+        h -> maxR =  maxEl(h -> item.high, h -> l -> maxR, h -> r -> maxR);
+    }
+    else if (IntervalItemLess(h -> item, item)) {
+        h -> r = IBSTdeleteR(h -> r, item);
+        h -> maxR =  maxEl(h -> item.high, h -> l -> maxR, h -> r -> maxR);
+    }
+
+    h -> N--; //recursive deletion (-1 in all ancestors)
+    if (item.low == h -> item.low && item.high == h -> item.high) {
+        y = h;
+        h = IBSTjoinR(h -> l, h -> r);
+        free(y); 
+    }
+
+    return h;   
+}
+
+bool IntervalItemOverlap(IntervalItem item1, IntervalItem item2) {
+    if (item1.low <= item2.high && item1.high >= item2.low) {
+        return true;
+    }
+    return false;
+}
+
+IntervalItem IBSTsearchR(link h, IntervalItem item) { //search first item to overlap with given item
+    if (h == NULL) {
+        exit(1);
+    }
+
+    if (IntervalItemOverlap(item, h -> item)) {
+        return h -> item;
+    }
+    else if (item.low <= h -> l -> maxR) {
+        IBSTsearchR(h -> l, item);
+    }
+    else {
+        IBSTsearchR(h -> r, item);
+    }
+
 }
