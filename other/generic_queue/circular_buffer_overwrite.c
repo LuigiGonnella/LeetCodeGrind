@@ -20,7 +20,8 @@ int main() {
 
     QUEUE QUEUEinit(int maxN) {
         QUEUE q = malloc(sizeof(*QUEUE));
-        q -> N = maxN + 1; //posizione cuscinetto per controllare se piena (in caso fosse stato pieno inserisco in questa ultima cella, sposto tail a 0 (nuova prima cella libera) e sposto head avanti di 1)
+        q -> N = maxN + 1; //posizione cuscinetto per DISTINGUERE FULL  (q -> tail + 1) % q -> N == q -> head
+                           // da EMPTY q -> tail == q -> head;
         // --> se pieno ho tail di una posizione indietro rispetto a head (serve modulo perche posso avere tail fisicamente alla fine e head all'inizio)
         // --> se vuoto ho head == tail
         q -> maxN = maxN;
