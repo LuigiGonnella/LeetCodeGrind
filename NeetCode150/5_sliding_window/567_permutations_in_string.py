@@ -35,8 +35,6 @@ class Solution:
         
         S1occ, S2occ = [0] * 26, [0] * 26
 
-        win_length = len(s1)
-
         for i in range(len(s1)):
             S1occ[ord(s1[i]) - ord('a')] += 1
             S2occ[ord(s2[i]) - ord('a')] += 1 #first window occurrencies
