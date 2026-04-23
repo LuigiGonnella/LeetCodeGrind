@@ -11,7 +11,7 @@ class Solution:
         y = head
         rev_head = None
 
-        while y is not None:
+        while y:
             t = y.next
 
             y.next = rev_head
