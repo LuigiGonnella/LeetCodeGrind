@@ -74,4 +74,47 @@ class Solution:
 
 
         return matches == 26
+    
+#OR, SAME COMPLEXITY:
+# class Solution:
+#     def checkInclusion(self, s1: str, s2: str) -> bool:
+#         if len(s2) < len(s1):
+#             return False
+
+#         mapNeed = {}
+#         mapHave = {}
+
+#         for i in range(len(s1)):
+#             mapNeed[s1[i]] = mapNeed.get(s1[i], 0) + 1
+        
+#         countTotCorrect = len(mapNeed)
+#         countActCorrect = 0
+
+#         for i in range(len(s1)):
+#             if s2[i] not in mapNeed:
+#                 continue
+#             mapHave[s2[i]] = mapHave.get(s2[i], 0) + 1
+#             if mapHave[s2[i]] == mapNeed[s2[i]]:
+#                 countActCorrect += 1
+        
+#         l = 0
+#         for r in range(len(s1), len(s2)):
+#             if countActCorrect == countTotCorrect:
+#                 return True
+            
+#             if s2[l] in mapNeed:
+#                 mapHave[s2[l]] -= 1
+
+#                 if mapHave[s2[l]] + 1 == mapNeed[s2[l]]:
+#                     countActCorrect -= 1
+            
+#             if s2[r] in mapNeed:
+#                 mapHave[s2[r]] = mapHave.get(s2[r], 0) + 1
+#                 if mapHave[s2[r]] == mapNeed[s2[r]]:
+#                     countActCorrect += 1
+            
+#             l += 1
+        
+#         return countActCorrect == countTotCorrect
+
         

@@ -178,7 +178,7 @@ int main() {
 
     //!REVERSE LIST
     void reverse(Node* head) {
-        Node* t, Node* y;
+        Node* t, Node* y=head;
         Node* rev_head = NULL;
 
         while (y != NULL) {
@@ -186,7 +186,7 @@ int main() {
 
             //insert y in rev_head
             y -> next = rev_head;
-            r = y;
+            rev_head = y;
 
             y=t; //go to next
         }
