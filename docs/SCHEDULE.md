@@ -3,11 +3,11 @@
     TWO POINTERS ✅
     STACK ✅
 
-## THEORY: 13) Alberi binari di ricerca ⌛
+## THEORY: 13) Alberi binari di ricerca ✅
 ### NEETCODE150: 
-    BINARY SEARCH
-    SLIDING WINDOW
-    LINKED LIST
+    BINARY SEARCH ✅
+    SLIDING WINDOW ✅
+    LINKED LIST ⌛
     TREES
 
 ## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS
