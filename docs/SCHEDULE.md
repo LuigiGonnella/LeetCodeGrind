@@ -7,8 +7,8 @@
 ### NEETCODE150: 
     BINARY SEARCH ✅
     SLIDING WINDOW ✅
-    LINKED LIST ⌛
-    TREES
+    LINKED LIST ✅
+    TREES ⌛
 
 ## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS
 ### NEETCODE150: 
