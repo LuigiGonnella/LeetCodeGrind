@@ -67,7 +67,43 @@ class Solution:
                 return curr.val
             
             curr = curr.right
+
+
+
+#!MORRIS TRAVERSAL (inorder traversal with O(1) space)
+class Solution:
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        curr = root
+
+        while curr:
+            if not curr.left: #smallest --> valuto
+                k -= 1
+                if k == 0:
+                    return curr.val
+                curr = curr.right #continuo ricerca a destra (vero destro o SUCCESSORE)
+            else:
+                pred = curr.left
+                while pred.right and pred.right != curr: #trovo PREDECESSORE
+                    pred = pred.right
+
+                if not pred.right:
+                    pred.right = curr
+                    curr = curr.left
+                else: #qui entro quando sto risalendo --> valuto in risalita ogni nodo CURR
+                    pred.right = None
+                    k -= 1
+                    if k == 0:
+                        return curr.val
+                    curr = curr.right
+
+        return -1
                 
+
+
+
+
+
+
 
 
 
