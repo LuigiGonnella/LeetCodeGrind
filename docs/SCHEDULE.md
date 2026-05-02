@@ -8,34 +8,35 @@
     BINARY SEARCH ✅
     SLIDING WINDOW ✅
     LINKED LIST ✅
-    TREES ⌛
+    TREES ✅
+    TRIES ⌛
 
-## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS
+## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS ⌛
 ### NEETCODE150: 
-    BACKTRACKING
-    TRIES
+    BACKTRACKING ⌛
+    
 
-## THEORY: 12) Code a priorità, Heap-Cab
+## THEORY: 12) Code a priorità, Heap-Cab ⌛
 ### NEETCODE150: 
-    HEAP/PRIORITY QUEUE
+    HEAP/PRIORITY QUEUE ⌛
 
-## THEORY: 11) L'ADT Grafo-Cam + 14) Algoritmi di visita dei grafi-Cam + 15) Applicazioni degli alg. di visita dei grafi + 16) Alberi ricoprenti minimi-Cam + 18) I cammini minimi
+## THEORY: 11) L'ADT Grafo-Cam + 14) Algoritmi di visita dei grafi-Cam + 15) Applicazioni degli alg. di visita dei grafi + 16) Alberi ricoprenti minimi-Cam + 18) I cammini minimi ⌛
 ### NEETCODE150: 
-    GRAPHS 
-    ADVANCED GRAPHS
+    GRAPHS ⌛
+    ADVANCED GRAPHS ⌛
 
 
-## THEORY: 7) Programmazione dinamica-Cam
+## THEORY: 7) Programmazione dinamica-Cam ⌛
 ### NEETCODE150: 
-    1-D DP 
-    2-D DP
+    1-D DP ⌛
+    2-D DP ⌛
 
-## THEORY: 10) Il paradigma Greedy-Cam
+## THEORY: 10) Il paradigma Greedy-Cam ⌛
 ### NEETCODE150: 
-    GREEDY
+    GREEDY ⌛
 
 ## OTHER NEETCODE150: 
-    INTERVALS
-    BIT MANIPULATION
-    MATH & GEOMETRY
+    INTERVALS ⌛
+    BIT MANIPULATION ⌛
+    MATH & GEOMETRY ⌛
 
