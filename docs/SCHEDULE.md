@@ -9,7 +9,7 @@
     SLIDING WINDOW ✅
     LINKED LIST ✅
     TREES ✅
-    TRIES ⌛
+    TRIES ✅
 
 ## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS ⌛
 ### NEETCODE150: 
