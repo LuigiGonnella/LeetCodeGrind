@@ -11,7 +11,7 @@
     TREES ✅
     TRIES ✅
 
-## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS ⌛
+## THEORY: 8) Esempi probl. Ottim.-Cam + RIPASSO COMBINATORICS ⌛ --> ripassa a memoria + segna metodologia di soluzione per alcuni esempi noti specificando COME gli algoritmi di combinatorics sono usati
 ### NEETCODE150: 
     BACKTRACKING ⌛
     
