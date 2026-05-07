@@ -69,3 +69,26 @@ class Solution:
         dfs(0)
         return res
         
+# So for n digits:
+
+# 4^n
+
+# possible combinations are generated.
+
+# Small example
+
+# digits = "79"
+
+
+# 7 → pqrs (4 choices)
+# 9 → wxyz (4 choices)
+
+# Total combinations:
+
+# 4×4=4^2=16
+
+# -->
+# pw px py pz
+# qw qx qy qz
+# rw rx ry rz
+# sw sx sy sz
