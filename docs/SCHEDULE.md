@@ -16,7 +16,7 @@
     BACKTRACKING ✅
     
 
-## THEORY: 12) Code a priorità, Heap-Cab ⌛
+## THEORY: 12) Code a priorità, Heap-Cab ✅
 ### NEETCODE150: 
     HEAP/PRIORITY QUEUE ⌛
 
