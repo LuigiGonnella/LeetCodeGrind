@@ -1,6 +1,6 @@
 
 #! ADJACENCY LIST DFS --> O(V + E) --> number of ones + 4 --> O(number of 1)
-#but here we are visiting each element of the matrix in the double loop --> O(N^2)
+#!but here we are visiting each element of the matrix in the double loop --> O(M*N)
 class Solution: 
     def numIslands(self, grid: List[List[str]]) -> int:
         ROWS = len(grid)
