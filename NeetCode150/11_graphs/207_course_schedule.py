@@ -1,3 +1,46 @@
+#!O(V + E) 
+# DETECT CYCLE DFS
+class Solution:
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        #construct a DAG and if is it possible to visit all the nodes starting from any SOURCE NODES --> True, otherwise --> False
+        if not prerequisites:
+            return True
+
+        graph = [[] for _ in range(numCourses)]
+
+
+        for dst, src in prerequisites:
+            graph[src].append(dst)
+  
+        state = [0] * numCourses
+
+        def dfs(node):
+            if state[node] == 1: #!CYCLE
+                return False
+    
+            if state[node] == 2:
+                return True
+
+            state[node] = 1
+
+            for neigh in graph[node]:
+                #! Only recursively visit if all prerequisites are met
+                if not dfs(neigh):
+                    return False
+                         
+
+            state[node] = 2
+            return True
+
+        for node in range(len(graph)): 
+            if state[node] == 0 and not dfs(node):
+                return False
+        
+        return True
+        
+
+
+
 
 #!O(V + E) (because of global visited, instead if the visited set was local  --> quadratic complexity)
 # KHAN'S ALGORITHM DFS
@@ -43,7 +86,7 @@ class Solution:
         
 
 
-#!O(V + E) 
+# #!O(V + E) 
 # # KHAN'S ALGORITHM BFS
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:    
