@@ -1,4 +1,4 @@
-class UnionFind:
+class UnionFind: #!O(V) space
     def __init__(self, n):
         self.parent = [i for i in range(n)]
         self.size = [1 for _ in range(n)]

@@ -5,14 +5,14 @@ class Solution:
 
         # Step 1: Build the Adjacency List
         # Since it's an undirected graph, we add the edge in both directions.
-        graph = defaultdict(list)
+        graph = defaultdict(list) #!O(V + E) space
         for u, v, weight in edges:
             graph[u].append((weight, v))
             graph[v].append((weight, u))
         
         # Step 2: Initialize the Priority Queue (Min-Heap) and Visited set
         # Heap stores tuples of (weight, node). Start at node 0 with 0 weight.
-        min_heap = [(0, 0)]
+        min_heap = [(0, 0)] #!O(E) space
         min_weight = 0
         visited = set()
 
