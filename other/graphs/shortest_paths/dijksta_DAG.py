@@ -33,8 +33,8 @@ class Solution:
         
         
         # 3. Initialize Distance and Spanning Tree/Parent arrays
-        distances = [float("+inf") for _ in range(n)]
-        st = [-1 for _ in range(n)]
+        distances = [float("+inf")] * n
+        st = [-1] * n
 
         distances[src] = 0
         st[src] = src 
