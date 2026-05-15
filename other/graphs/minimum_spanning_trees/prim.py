@@ -1,3 +1,5 @@
+
+#!O(ElogE) = O(ElogV)
 class Solution:
     def minimumSpanningTree(self, n, edges):
 
@@ -16,10 +18,10 @@ class Solution:
 
         # Step 3: The Core Algorithm Loop
         # We stop early if we have visited all 'n' nodes.
-        while min_heap and len(visited) < n:
+        while min_heap and len(visited) < n: #!O(E) --> maximum E edges in HEAP
             
             # Pop the smallest available edge that connects the MST to a new node
-            weight, node = heapq.heappop(min_heap)
+            weight, node = heapq.heappop(min_heap) #!O(logE)
             
             # If the node is already in our MST, ignore it and continue
             if node in visited:
