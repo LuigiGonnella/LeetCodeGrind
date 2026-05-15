@@ -7,8 +7,8 @@ class Solution:
         # 1. Build the Adjacency List
         graph = defaultdict(list)
 
-        for u, v in edges:
-            graph[u].append(v) #directed
+        for u, v, weight in edges:
+            graph[u].append((v, weight)) #directed
         
         # 2. Initialize Distance and Spanning Tree/Parent arrays
         distances = [float("+inf") for _ in range(n)]
@@ -27,12 +27,12 @@ class Solution:
             if distance > distances[node]: #old entry
                 continue
 
-            for neigh in graph[node]:
+            for neigh, weight in graph[node]:
                 # Relaxation Step: Have we found a strictly shorter path to neigh?
-                if distances[node] + distance < distances[neigh]:
-                    distances[neigh] = distances[node] + distance
+                if distances[node] + weight < distances[neigh]:
+                    distances[neigh] = distances[node] + weight
                     parents[neigh] = node
-                    # Push the newly found better distance to the heap
+                    # Push the newly found better distance to the heap --> we have only REACHABLE nodes (so no need to check if distance is < +INF)
                     heapq.heappush(min_heap, (distances[neigh], neigh)) #!O(logE)
         
-        return distance, st
+        return distances, st
