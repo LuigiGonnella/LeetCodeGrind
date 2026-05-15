@@ -44,7 +44,7 @@ class Solution:
             if distances[node] < float("+inf"): #if a node is unreachable, do not consider its neighbors
                 for neigh, weight in graph[node]:
                     # Relaxation Step: Have we found a strictly shorter path to neigh?
-                    if distances[node] + weight < distances[neigh]:
+                    if distances[node] + weight < distances[neigh]: #for maximum paths, just put > instead of < and initialize distances to -INF 
                         distances[neigh] = distances[node] + weight
                         parents[neigh] = node
         
