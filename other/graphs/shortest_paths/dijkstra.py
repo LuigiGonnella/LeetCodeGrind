@@ -21,7 +21,8 @@ class Solution:
 
         while min_heap: #maximum E iterations
 
-            distance, node = heapq.heapop(min_heap) #!O(logE)
+            distance, node = heapq.heapop(min_heap) #!O(logE) --> **IMPORTANT**: se avessi deque invece di MINHEAP, l'algoritmo sarebbe esponenziale --> ad ogni WEIGHT minore dovrei aggiornare TUTTI i vicini
+            #!--> pensiamo al caso dei seguenti pesi aggiunti in quest'ordine: 100, 99, 98, 97, .... --> con min_heap invece valuto direttamente il MINIMO PER PRIMO (poi gli altri li skippo)
 
             # OPTIMIZATION (Lazy Deletion):
             if distance > distances[node]: #old entry
