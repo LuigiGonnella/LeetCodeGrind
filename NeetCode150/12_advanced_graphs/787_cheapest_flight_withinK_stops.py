@@ -1,5 +1,13 @@
 
-#!O(ElogE)
+
+#Time Complexity: $O(E * K log(V *K))
+# The Queue Size: In the worst-case scenario, every single node could be added to the priority queue up to K times 
+# (once for each possible number of stops, 0 through K). 
+# This means the priority queue can grow to a maximum size of V*K.
+# Heap Operations: Popping from or pushing to a heap of that size takes O(log(V * K)) time.
+# Edge Relaxations: Because we can visit each node up to K times, we might also evaluate each of its outgoing edges up to K times. 
+# Thus, we process at most E * K edges.
+
 class Solution:
     def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
         
