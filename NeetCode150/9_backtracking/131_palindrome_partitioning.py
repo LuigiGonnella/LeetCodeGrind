@@ -1,4 +1,4 @@
-# O(2 ^ N)
+# O(N* 2 ^ N)
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
         part = []
@@ -24,8 +24,8 @@ class Solution:
                 return
 
 
-            for j in range(i, len(s)):
-                if isPalindrome(s[i : j + 1]):
+            for j in range(i, len(s)): #there are N - 1 possible cuts and for each CUT we can DO IT (valid palindrome) or NOT 2^N
+                if isPalindrome(s[i : j + 1]): #N complexity to slice --> N*2^N total
                     part.append(s[i : j + 1])
                     dfs(j + 1)
                     part.pop()
