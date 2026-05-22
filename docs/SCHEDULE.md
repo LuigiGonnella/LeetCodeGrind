@@ -26,9 +26,9 @@
     ADVANCED GRAPHS ✅
 
 
-## THEORY: 7) Programmazione dinamica-Cam ⌛
+## THEORY: 7) Programmazione dinamica-Cam ✅
 ### NEETCODE150: 
-    1-D DP ⌛
+    1-D DP ✅
     2-D DP ⌛
 
 ## THEORY: 10) Il paradigma Greedy-Cam ⌛
