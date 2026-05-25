@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Distinct Subsequences DP Visualizer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f6;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 { margin-bottom: 10px; color: #2c3e50; }
+        .controls {
+            margin: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #3498db;
+            color: white;
+            transition: background 0.2s;
+        }
+        button:hover { background: #2980b9; }
+        button:disabled { background: #bdc3c7; cursor: not-allowed; }
+        #reset { background: #e74c3c; }
+        #reset:hover { background: #c0392b; }
+        
+        .container {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: white;
+        }
+        th, td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        th { background: #34495e; color: white; }
+        .row-label { background: #34495e; color: white; }
+        
+        /* State Colors */
+        .base-case { background: #d5f5e3; } /* Light green */
+        .current { background: #f9e79f; border: 2px solid #f39c12; } /* Yellow highlight */
+        .look-down { background: #a9dfbf; } /* Green arrow pointer */
+        .look-diag { background: #aed6f1; } /* Blue arrow pointer */
+        .processed { background: #eaeded; color: #7f8c8d; }
+        .filled { background: #e8f8f5; color: #117a65; }
+
+        .status-box {
+            width: 300px;
+            padding: 20px;
+            background: white;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+        .code-snippet {
+            font-family: monospace;
+            background: #2c3e50;
+            color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+        .highlight-line { background: #566573; display: block; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <h2>Distinct Subsequences DP Step-by-Step</h2>
+    <div>Target strings: <strong>s = "RABBBIT"</strong>, <strong>t = "RABBIT"</strong></div>
+
+    <div class="controls">
+        <button id="prev" onclick="stepBackward()" disabled>⏮ Last Step</button>
+        <button id="next" onclick="stepForward()">Next Step (i, j) ⏭</button>
+        <button id="reset" onclick="resetSim()">Reset</button>
+    </div>
+
+    <div class="container">
+        <table id="dpTable"></table>
+
+        <div class="status-box">
+            <h3>Execution Status</h3>
+            <div id="statusText">Click "Next Step" to begin filling out the base cases.</div>
+            <div class="code-snippet" id="code">
+for i in range(n - 1, -1, -1):
+    for j in range(m - 1, -1, -1):
+        dp[i][j] = dp[i + 1][j]
+        if s[i] == t[j]:
+            dp[i][j] += dp[i + 1][j + 1]</div>
+        </div>
+    </div>
+
+<script>
+    const s = "RABBBIT";
+    const t = "RABBIT";
+    const n = s.length;
+    const m = t.length;
+
+    let dp = Array.from({ length: n + 1 }, () => Array(m + 1).fill(0));
+    let history = [];
+    let currentStepIndex = -1;
+
+    // Pre-calculate all states for debugging history timeline
+    function generateTimeline() {
+        let timeline = [];
+        
+        // 1. Initial State
+        timeline.push({
+            type: "init",
+            i: null, j: null,
+            grid: Array.from({ length: n + 1 }, () => Array(m + 1).fill(0)),
+            msg: "Matrix initialized with 0s. Dimensions: (n+1) x (m+1).",
+            line: 0
+        });
+
+        // 2. Base Cases
+        let baseGrid = Array.from({ length: n + 1 }, () => Array(m + 1).fill(0));
+        for(let i=0; i<=n; i++) {
+            baseGrid[i][m] = 1;
+        }
+        timeline.push({
+            type: "base",
+            i: null, j: null,
+            grid: JSON.parse(JSON.stringify(baseGrid)),
+            msg: "Base Cases: dp[i][m] = 1 filled out. (An empty target string 't' can always be formed 1 way).",
+            line: 1
+        });
+
+        // 3. Iteration Loop
+        let activeGrid = JSON.parse(JSON.stringify(baseGrid));
+        for (let i = n - 1; i >= 0; i--) {
+            for (let j = m - 1; j >= 0; j--) {
+                let msg = `Checking s[${i}] ('${s[i]}') and t[${j}] ('${t[j]}').\n\n`;
+                msg += `1. First, copy value from directly below (dp[i+1][j]): ${activeGrid[i+1][j]}\n`;
+                
+                let matches = s[i] === t[j];
+                let val = activeGrid[i+1][j];
+                
+                timeline.push({
+                    type: "peek",
+                    i: i, j: j,
+                    grid: JSON.parse(JSON.stringify(activeGrid)),
+                    msg: msg + (matches ? `2. Characters MATCH! We will also add the diagonal value.` : `2. Mismatch. We do not look diagonally.`),
+                    line: matches ? 4 : 3
+                });
+
+                if (matches) {
+                    val += activeGrid[i+1][j+1];
+                }
+                activeGrid[i][j] = val;
+
+                timeline.push({
+                    type: "commit",
+                    i: i, j: j,
+                    grid: JSON.parse(JSON.stringify(activeGrid)),
+                    msg: `Updated cell dp[${i}][${j}] = ${val}.`,
+                    line: 5
+                });
+            }
+        }
+
+        // 4. Final Answer
+        timeline.push({
+            type: "final",
+            i: 0, j: 0,
+            grid: JSON.parse(JSON.stringify(activeGrid)),
+            msg: `Done! The final answer is sitting at dp[0][0] = ${activeGrid[0][0]}. There are 3 distinct subsequences.`,
+            line: 6
+        });
+
+        return timeline;
+    }
+
+    history = generateTimeline();
+
+    function renderGrid(state) {
+        const table = document.getElementById("dpTable");
+        table.innerHTML = "";
+
+        // Header Row (t characters)
+        let headerRow = "<tr><th>s \\ t</th>";
+        for(let j=0; j<m; j++) headerRow += `<th>${t[j]}<br><small>j=${j}</small></th>`;
+        headerRow += "<th>_ <br><small>j=${m}</small></th></tr>";
+        table.innerHTML += headerRow;
+
+        // Rows
+        for(let i=0; i<=n; i++) {
+            let rowHtml = `<tr><td class="row-label">${i < n ? s[i] : '_'}<br><small>i=${i}</small></td>`;
+            for(let j=0; j<=m; j++) {
+                let cellValue = state.grid[i][j];
+                let cellClass = "";
+
+                if (state.type === "base" && j === m) cellClass = "base-case";
+                if (j === m && state.type !== "init") cellClass = "filled";
+
+                // Dynamic coloring based on current pointer frame
+                if (state.i !== null && state.j !== null) {
+                    if (i === state.i && j === state.j) {
+                        cellClass = "current";
+                    } else if (i === state.i + 1 && j === state.j) {
+                        if (state.type === "peek") cellClass = "look-down";
+                    } else if (i === state.i + 1 && j === state.j + 1 && s[state.i] === t[state.j]) {
+                        if (state.type === "peek") cellClass = "look-diag";
+                    } else if (i > state.i || (i === state.i && j > state.j)) {
+                        if (j !== m) cellClass = "processed";
+                    }
+                } else if (state.type === "final" && i === 0 && j === 0) {
+                    cellClass = "current";
+                }
+
+                rowHtml += `<td class="${cellClass}">${cellValue}</td>`;
+            }
+            rowHtml += "</tr>";
+            table.innerHTML += rowHtml;
+        }
+
+        // Update Text
+        document.getElementById("statusText").innerText = state.msg;
+        
+        // Dynamic Code Highlight Simulator
+        const codeBox = document.getElementById("code");
+        const lines = [
+`for i in range(n - 1, -1, -1):`,
+`    for j in range(m - 1, -1, -1):`,
+`        dp[i][j] = dp[i + 1][j]`,
+`        if s[i] == t[j]:`,
+`            dp[i][j] += dp[i + 1][j + 1]`
+        ];
+        
+        if (state.line >= 2 && state.line <= 5) {
+            let highlighted = [...lines];
+            highlighted[state.line - 1] = `<span class="highlight-line">${highlighted[state.line - 1]}</span>`;
+            codeBox.innerHTML = highlighted.join("\n");
+        } else {
+            codeBox.innerHTML = lines.join("\n");
+        }
+    }
+
+    function stepForward() {
+        if (currentStepIndex < history.length - 1) {
+            currentStepIndex++;
+            renderGrid(history[currentStepIndex]);
+        }
+        updateButtons();
+    }
+
+    function stepBackward() {
+        if (currentStepIndex > 0) {
+            currentStepIndex--;
+            renderGrid(history[currentStepIndex]);
+        }
+        updateButtons();
+    }
+
+    function resetSim() {
+        currentStepIndex = 0;
+        renderGrid(history[currentStepIndex]);
+        updateButtons();
+    }
+
+    function updateButtons() {
+        document.getElementById("prev").disabled = (currentStepIndex <= 0);
+        document.getElementById("next").disabled = (currentStepIndex >= history.length - 1);
+    }
+
+    // Initialize UI on load
+    resetSim();
+</script>
+</body>
+</html>
