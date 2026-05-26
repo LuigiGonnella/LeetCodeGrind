@@ -1,6 +1,6 @@
 
 
-#Time Complexity: O(E * K log(V *K))
+#Time Complexity: O(E * K log(V * K))
 # The Queue Size: In the worst-case scenario, every single node could be added to the priority queue up to K times 
 # (once for each possible number of stops, 0 through K). 
 # This means the priority queue can grow to a maximum size of V*K.
