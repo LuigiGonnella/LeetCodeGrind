@@ -164,7 +164,7 @@ class PQ:
             self.nodes[p], self.nodes[pos] = self.nodes[pos], self.nodes[p] 
             pos = p
         
-        #or do heapify
+        #OR do heapify
         self.heapify(pos)
 
         #it looks like we are doing both but 

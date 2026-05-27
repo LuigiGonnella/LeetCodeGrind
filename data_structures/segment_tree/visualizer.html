@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segment Tree Visualizer: Memory & Index Mapping</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f7fb;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #1a202c;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748b;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .array-container {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 30px 0;
+            gap: 10px;
+        }
+        .array-box {
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 60px;
+        }
+        .array-box.highlight {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .array-box span {
+            display: block;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
+            font-weight: normal;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+        .tab-btn {
+            padding: 10px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            background: #e2e8f0;
+            color: #475569;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover {
+            background: #cbd5e1;
+        }
+        .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .description-box {
+            background: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 0 6px 6px 0;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .sandbox {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .tree-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fafafa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .tree-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #1e293b;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 4px;
+        }
+        .tree-title.max-title {
+            border-bottom-color: #ec4899;
+        }
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        .node {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #64748b;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 16px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .node .range {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: normal;
+        }
+        .node .tree-idx {
+            position: absolute;
+            top: -18px;
+            font-size: 11px;
+            color: #ff5722;
+            font-weight: bold;
+            background: #fff;
+            padding: 0 4px;
+        }
+        
+        /* Memory Array Styles */
+        .flat-array-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #475569;
+            margin: 15px 0 8px 0;
+            text-align: left;
+            width: 100%;
+        }
+        .flat-array {
+            display: flex;
+            width: 100%;
+            overflow-x: auto;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .flat-cell {
+            flex: 1;
+            min-width: 45px;
+            text-align: center;
+            padding: 8px 0;
+            font-weight: bold;
+            border-right: 1px solid #e2e8f0;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        .flat-cell:last-child {
+            border-right: none;
+        }
+        .flat-cell span {
+            display: block;
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: normal;
+            margin-top: 4px;
+        }
+        .flat-cell.dummy {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        /* Interactive Highlights */
+        .node.visited, .flat-cell.visited {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .node.max-visited, .flat-cell.max-visited {
+            border-color: #ec4899;
+            background-color: #fdf2f8;
+        }
+        .node.modified, .flat-cell.modified {
+            border-color: #eab308 !important;
+            background: #fef9c3 !important;
+        }
+        .node.selected, .flat-cell.selected {
+            background: #22c55e !important;
+            border-color: #16a34a !important;
+            color: white;
+        }
+        .node.selected .range, .node.selected .tree-idx, .flat-cell.selected span {
+            color: #dcfce7 !important;
+        }
+        .node.selected .tree-idx { background: transparent; }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            font-size: 13px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Segment Tree Memory Visualizer</h1>
+    <div class="section-title">Mapping Tree Hierarchy to 1-Based Flat Memory Arrays</div>
+
+    <div class="array-container">
+        <div class="array-box" id="arr-0">1<span>Original Idx 0</span></div>
+        <div class="array-box" id="arr-1">5<span>Original Idx 1</span></div>
+        <div class="array-box" id="arr-2">2<span>Original Idx 2</span></div>
+        <div class="array-box" id="arr-3">8<span>Original Idx 3</span></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchMode('build')">1. Build State</button>
+        <button class="tab-btn" onclick="switchMode('update')">2. Point Update (Idx 2 &rarr; 10)</button>
+        <button class="tab-btn" onclick="switchMode('query')">3. Range Query [0, 2]</button>
+    </div>
+
+    <div class="description-box" id="description">
+        <strong>Structure Mapping:</strong> The red labels above each node indicate their explicit indices within the flat linear memory array. Notice how left children reside at <code>2 * i</code> and right children reside at <code>2 * i + 1</code>. Index 0 remains completely empty/unused.
+    </div>
+
+    <div class="sandbox">
+        <div class="tree-column">
+            <div class="tree-title">Range Sum Tree</div>
+            
+            <div class="tree-level">
+                <div class="node" id="sum-n1"><span class="tree-idx">tree[1]</span><span>16</span><span class="range">[0-3]</span></div>
+            </div>
+            <div class="tree-level" style="gap: 120px;">
+                <div class="node" id="sum-n2"><span class="tree-idx">tree[2]</span><span>6</span><span class="range">[0-1]</span></div>
+                <div class="node" id="sum-n3"><span class="tree-idx">tree[3]</span><span>10</span><span class="range">[2-3]</span></div>
+            </div>
+            <div class="tree-level" style="gap: 25px;">
+                <div class="node" id="sum-n4"><span class="tree-idx">tree[4]</span><span>1</span><span class="range">[0-0]</span></div>
+                <div class="node" id="sum-n5"><span class="tree-idx">tree[5]</span><span>5</span><span class="range">[1-1]</span></div>
+                <div class="node" id="sum-n6"><span class="tree-idx">tree[6]</span><span>2</span><span class="range">[2-2]</span></div>
+                <div class="node" id="sum-n7"><span class="tree-idx">tree[7]</span><span>8</span><span class="range">[3-3]</span></div>
+            </div>
+
+            <div class="flat-array-title">Sequential Memory Array Layout (<code>self.tree</code>)</div>
+            <div class="flat-array">
+                <div class="flat-cell dummy">-<span>tree[0]</span></div>
+                <div class="flat-cell" id="f-sum-1">16<span>tree[1]</span></div>
+                <div class="flat-cell" id="f-sum-2">6<span>tree[2]</span></div>
+                <div class="flat-cell" id="f-sum-3">10<span>tree[3]</span></div>
+                <div class="flat-cell" id="f-sum-4">1<span>tree[4]</span></div>
+                <div class="flat-cell" id="f-sum-5">5<span>tree[5]</span></div>
+                <div class="flat-cell" id="f-sum-6">2<span>tree[6]</span></div>
+                <div class="flat-cell" id="f-sum-7">8<span>tree[7]</span></div>
+            </div>
+        </div>
+
+        <div class="tree-column">
+            <div class="tree-title max-title">Range Max Tree</div>
+            
+            <div class="tree-level">
+                <div class="node" id="max-n1"><span class="tree-idx">tree[1]</span><span>8</span><span class="range">[0-3]</span></div>
+            </div>
+            <div class="tree-level" style="gap: 120px;">
+                <div class="node" id="max-n2"><span class="tree-idx">tree[2]</span><span>5</span><span class="range">[0-1]</span></div>
+                <div class="node" id="max-n3"><span class="tree-idx">tree[3]</span><span>8</span><span class="range">[2-3]</span></div>
+            </div>
+            <div class="tree-level" style="gap: 25px;">
+                <div class="node" id="max-n4"><span class="tree-idx">tree[4]</span><span>1</span><span class="range">[0-0]</span></div>
+                <div class="node" id="max-n5"><span class="tree-idx">tree[5]</span><span>5</span><span class="range">[1-1]</span></div>
+                <div class="node" id="max-n6"><span class="tree-idx">tree[6]</span><span>2</span><span class="range">[2-2]</span></div>
+                <div class="node" id="max-n7"><span class="tree-idx">tree[7]</span><span>8</span><span class="range">[3-3]</span></div>
+            </div>
+
+            <div class="flat-array-title">Sequential Memory Array Layout (<code>self.tree</code>)</div>
+            <div class="flat-array">
+                <div class="flat-cell dummy">-<span>tree[0]</span></div>
+                <div class="flat-cell" id="f-max-1">8<span>tree[1]</span></div>
+                <div class="flat-cell" id="f-max-2">5<span>tree[2]</span></div>
+                <div class="flat-cell" id="f-max-3">8<span>tree[3]</span></div>
+                <div class="flat-cell" id="f-max-4">1<span>tree[4]</span></div>
+                <div class="flat-cell" id="f-max-5">5<span>tree[5]</span></div>
+                <div class="flat-cell" id="f-max-6">2<span>tree[6]</span></div>
+                <div class="flat-cell" id="f-max-7">8<span>tree[7]</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item"><div class="legend-color" style="border: 2px solid #3b82f6; background: #eff6ff;"></div> Traversed/Accessed (Sum)</div>
+        <div class="legend-item"><div class="legend-color" style="border: 2px solid #ec4899; background: #fdf2f8;"></div> Traversed/Accessed (Max)</div>
+        <div class="legend-item"><div class="legend-color" style="background: #eab308;"></div> Values Recalculated</div>
+        <div class="legend-item"><div class="legend-color" style="background: #22c55e;"></div> Selected to Answer Query</div>
+    </div>
+</div>
+
+<script>
+    function clearStyles() {
+        document.querySelectorAll('.node, .flat-cell').forEach(el => {
+            if(!el.classList.contains('dummy')) el.className = el.tagName === 'DIV' && el.classList.contains('node') ? 'node' : 'flat-cell';
+        });
+        
+        document.querySelectorAll('.array-box').forEach(b => b.className = 'array-box');
+
+        // Reset base string values
+        document.getElementById('arr-2').innerHTML = '2<span>Original Idx 2</span>';
+        
+        // Sum Tree values
+        document.getElementById('sum-n1').querySelector('span:not(.tree-idx):not(.range)').innerText = '16';
+        document.getElementById('sum-n3').querySelector('span:not(.tree-idx):not(.range)').innerText = '10';
+        document.getElementById('sum-n6').querySelector('span:not(.tree-idx):not(.range)').innerText = '2';
+        document.getElementById('f-sum-1').innerHTML = '16<span>tree[1]</span>';
+        document.getElementById('f-sum-3').innerHTML = '10<span>tree[3]</span>';
+        document.getElementById('f-sum-6').innerHTML = '2<span>tree[6]</span>';
+        
+        // Max Tree values
+        document.getElementById('max-n1').querySelector('span:not(.tree-idx):not(.range)').innerText = '8';
+        document.getElementById('max-n3').querySelector('span:not(.tree-idx):not(.range)').innerText = '8';
+        document.getElementById('max-n6').querySelector('span:not(.tree-idx):not(.range)').innerText = '2';
+        document.getElementById('f-max-1').innerHTML = '8<span>tree[1]</span>';
+        document.getElementById('f-max-3').innerHTML = '8<span>tree[3]</span>';
+        document.getElementById('f-max-6').innerHTML = '2<span>tree[6]</span>';
+    }
+
+    function switchMode(mode) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        clearStyles();
+        const desc = document.getElementById('description');
+
+        if (mode === 'build') {
+            desc.innerHTML = "<strong>Structure Mapping:</strong> The red labels above each node indicate their explicit indices within the flat linear memory array. Notice how left children reside at <code>2 * i</code> and right children reside at <code>2 * i + 1</code>. Index 0 remains completely empty/unused.";
+        } 
+        else if (mode === 'update') {
+            desc.innerHTML = "<strong>Point Update Execution:</strong> Changing original array index 2 to 10 triggers mutations along a single log-N path. In memory, this isolates array elements <b>tree[6]</b>, <b>tree[3]</b>, and <b>tree[1]</b>. Notice how the linear elements update side by side inside the flat layout block!";
+            
+            document.getElementById('arr-2').innerHTML = '10<span>Original Idx 2</span>';
+            document.getElementById('arr-2').classList.add('highlight');
+
+            // Apply modifications to structures
+            document.getElementById('sum-n6').querySelector('span:not(.tree-idx):not(.range)').innerText = '10';
+            document.getElementById('sum-n3').querySelector('span:not(.tree-idx):not(.range)').innerText = '18';
+            document.getElementById('sum-n1').querySelector('span:not(.tree-idx):not(.range)').innerText = '24';
+            document.getElementById('f-sum-6').innerHTML = '10<span>tree[6]</span>';
+            document.getElementById('f-sum-3').innerHTML = '18<span>tree[3]</span>';
+            document.getElementById('f-sum-1').innerHTML = '24<span>tree[1]</span>';
+
+            document.getElementById('max-n6').querySelector('span:not(.tree-idx):not(.range)').innerText = '10';
+            document.getElementById('max-n3').querySelector('span:not(.tree-idx):not(.range)').innerText = '10';
+            document.getElementById('max-n1').querySelector('span:not(.tree-idx):not(.range)').innerText = '10';
+            document.getElementById('f-max-6').innerHTML = '10<span>tree[6]</span>';
+            document.getElementById('f-max-3').innerHTML = '10<span>tree[3]</span>';
+            document.getElementById('f-max-1').innerHTML = '10<span>tree[1]</span>';
+
+            // Add classes
+            ['sum-n1', 'sum-n3', 'sum-n6', 'f-sum-1', 'f-sum-3', 'f-sum-6'].forEach(id => document.getElementById(id).classList.add('visited', 'modified'));
+            ['max-n1', 'max-n3', 'max-n6', 'f-max-1', 'f-max-3', 'f-max-6'].forEach(id => document.getElementById(id).classList.add('max-visited', 'modified'));
+        } 
+        else if (mode === 'query') {
+            desc.innerHTML = "<strong>Range Query Query Range [0, 2]:</strong> The execution stack checks the tree nodes in binary chunks. Instead of evaluating 3 different leaves, it hits <code>tree[2]</code> (covering indices [0-1]) and <code>tree[6]</code> (covering index [2-2]). The calculation reads directly from these two spots in the flat array without spending time touching anything else.";
+
+            document.getElementById('arr-0').classList.add('highlight');
+            document.getElementById('arr-1').classList.add('highlight');
+            document.getElementById('arr-2').classList.add('highlight');
+
+            // Visited roots
+            document.getElementById('sum-n1').classList.add('visited');
+            document.getElementById('f-sum-1').classList.add('visited');
+            document.getElementById('max-n1').classList.add('max-visited');
+            document.getElementById('f-max-1').classList.add('max-visited');
+            
+            // Selected nodes representing targets
+            document.getElementById('sum-n2').classList.add('selected');
+            document.getElementById('sum-n6').classList.add('selected');
+            document.getElementById('f-sum-2').classList.add('selected');
+            document.getElementById('f-sum-6').classList.add('selected');
+            
+            document.getElementById('max-n2').classList.add('selected');
+            document.getElementById('max-n6').classList.add('selected');
+            document.getElementById('f-max-2').classList.add('selected');
+            document.getElementById('f-max-6').classList.add('selected');
+        }
+    }
+</script>
+
+</body>
+</html>
