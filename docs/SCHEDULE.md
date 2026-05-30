@@ -33,7 +33,7 @@
 
 ## THEORY: 10) Il paradigma Greedy-Cam ✅
 ### NEETCODE150: 
-    GREEDY ⌛
+    GREEDY ✅
 
 ## OTHER NEETCODE150: 
     INTERVALS ⌛
