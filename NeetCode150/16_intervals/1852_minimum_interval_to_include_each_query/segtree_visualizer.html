@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Segment Tree Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .tree-node {
+            transition: all 0.2s ease-in-out;
+        }
+        .tree-node:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-8 font-sans">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-10 text-center">
+            <h1 class="text-3xl font-bold text-teal-400 mb-2">Segment Tree Final State</h1>
+            <p class="text-slate-400">
+                Tracking Minimum Interval Length over Compressed Points: 
+                <span class="bg-slate-800 text-teal-300 px-2 py-1 rounded font-mono text-sm">[1, 2, 3, 6, 7, 8]</span>
+            </p>
+        </header>
+
+        <div class="flex flex-col items-center gap-12 overflow-x-auto pb-6">
+            
+            <div class="flex justify-center w-full">
+                <div class="tree-node bg-slate-800 border-2 border-teal-500 rounded-lg p-4 text-center shadow-xl w-64">
+                    <div class="text-xs text-slate-400 font-mono mb-1">treeIdx: 0</div>
+                    <div class="font-bold text-sm text-slate-300">Range: idx [0, 5] (Pts: 1-8)</div>
+                    <div class="text-2xl font-extrabold text-teal-400 mt-2">Value: 2</div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-16 w-full">
+                <div class="tree-node bg-slate-800 border-2 border-emerald-500 rounded-lg p-4 text-center shadow-lg w-56">
+                    <div class="text-xs text-slate-400 font-mono mb-1">treeIdx: 1</div>
+                    <div class="font-bold text-sm text-slate-300">Range: idx [0, 2] (Pts: 1-3)</div>
+                    <div class="text-xl font-extrabold text-emerald-400 mt-2">Value: 2</div>
+                </div>
+                <div class="tree-node bg-slate-800 border-2 border-amber-500 rounded-lg p-4 text-center shadow-lg w-56">
+                    <div class="text-xs text-slate-400 font-mono mb-1">treeIdx: 2</div>
+                    <div class="font-bold text-sm text-slate-300">Range: idx [3, 5] (Pts: 6-8)</div>
+                    <div class="text-xl font-extrabold text-amber-400 mt-2">Value: 1</div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-6 w-full text-xs">
+                <div class="tree-node bg-slate-800/80 border border-emerald-600/50 rounded p-3 text-center w-40">
+                    <div class="text-[10px] text-slate-500 font-mono">treeIdx: 3</div>
+                    <div class="font-semibold text-slate-300">idx [0, 1] (Pts: 1-2)</div>
+                    <div class="text-lg font-bold text-emerald-400 mt-1">Value: 2</div>
+                </div>
+                <div class="tree-node bg-slate-950 border border-purple-500 rounded p-3 text-center w-40 shadow-inner">
+                    <div class="text-[10px] text-purple-400 font-mono font-bold">LEAF | treeIdx: 4</div>
+                    <div class="font-semibold text-slate-300">idx [2, 2] (Pt: 3)</div>
+                    <div class="text-lg font-bold text-purple-400 mt-1">Value: 2</div>
+                </div>
+                <div class="tree-node bg-slate-800/80 border border-amber-600/50 rounded p-3 text-center w-40">
+                    <div class="text-[10px] text-slate-500 font-mono">treeIdx: 5</div>
+                    <div class="font-semibold text-slate-300">idx [3, 4] (Pts: 6-7)</div>
+                    <div class="text-lg font-bold text-amber-400 mt-1">Value: 1</div>
+                </div>
+                <div class="tree-node bg-slate-950 border border-purple-500 rounded p-3 text-center w-40 shadow-inner">
+                    <div class="text-[10px] text-purple-400 font-mono font-bold">LEAF | treeIdx: 6</div>
+                    <div class="font-semibold text-slate-300">idx [5, 5] (Pt: 8)</div>
+                    <div class="text-lg font-bold text-rose-400 mt-1">Value: &infin;</div>
+                </div>
+            </div>
+
+            <div class="flex justify-start gap-4 w-full max-w-4xl px-4 justify-between">
+                <div class="flex gap-4">
+                    <div class="tree-node bg-slate-950 border border-purple-500 rounded p-3 text-center w-36 shadow-inner">
+                        <div class="text-[10px] text-purple-400 font-mono font-bold">LEAF | treeIdx: 7</div>
+                        <div class="font-semibold text-slate-300">idx [0, 0] (Pt: 1)</div>
+                        <div class="text-lg font-bold text-purple-400 mt-1">Value: 3</div>
+                    </div>
+                    <div class="tree-node bg-slate-950 border border-purple-500 rounded p-3 text-center w-36 shadow-inner">
+                        <div class="text-[10px] text-purple-400 font-mono font-bold">LEAF | treeIdx: 8</div>
+                        <div class="font-semibold text-slate-300">idx [1, 1] (Pt: 2)</div>
+                        <div class="text-lg font-bold text-purple-400 mt-1">Value: 2</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mr-24">
+                    <div class="tree-node bg-slate-950 border border-purple-500 rounded p-3 text-center w-36 shadow-inner">
+                        <div class="text-[10px] text-purple-400 font-mono font-bold">LEAF | treeIdx: 11</div>
+                        <div class="font-semibold text-slate-300">idx [3, 3] (Pt: 6)</div>
+                        <div class="text-lg font-bold text-purple-400 mt-1">Value: 1</div>
+                    </div>
+                    <div class="tree-node bg-slate-950 border border-purple-500 rounded p-3 text-center w-36 shadow-inner">
+                        <div class="text-[10px] text-purple-400 font-mono font-bold">LEAF | treeIdx: 12</div>
+                        <div class="font-semibold text-slate-300">idx [4, 4] (Pt: 7)</div>
+                        <div class="text-lg font-bold text-purple-400 mt-1">Value: 5</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-800/40 p-6 rounded-xl border border-slate-700">
+            <div>
+                <h3 class="text-lg font-semibold text-teal-400 mb-2">Coordinate Mapping Reference</h3>
+                <table class="w-full text-sm text-left font-mono text-slate-300">
+                    <thead>
+                        <tr class="border-b border-slate-700 text-slate-400">
+                            <th class="pb-1">Array Idx</th>
+                            <th class="pb-1">Real Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>2</td></tr>
+                        <tr><td>2</td><td>3</td></tr>
+                        <tr><td>3</td><td>6</td></tr>
+                        <tr><td>4</td><td>7</td></tr>
+                        <tr><td>5</td><td>8</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-sm text-slate-300 leading-relaxed">
+                <h3 class="text-lg font-semibold text-teal-400 mb-2">Execution Context</h3>
+                <p>The layout highlights the tree topology generated by building over 6 points. Purple nodes represent base case leaves. Notice how internal nodes successfully maintain the min attributes passed up by their child ranges.</p>
+                <p class="mt-2 text-xs text-slate-500">*Note: Unreferenced tree indices (like 9 and 10) remain unallocated or structural identities based on structural layout execution loops.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
