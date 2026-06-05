@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Temperatures - Tracing Visualization</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --primary: #007bff;
+            --i-color: #e3f2fd;
+            --i-border: #1e88e5;
+            --j-color: #fff3e0;
+            --j-border: #fb8c00;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #222;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: var(--primary);
+            color: white;
+            transition: opacity 0.2s;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .array-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+        }
+
+        .row-label {
+            width: 120px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .cells {
+            display: flex;
+            gap: 8px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-weight: bold;
+            position: relative;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .cell .index {
+            font-size: 10px;
+            color: #999;
+            position: absolute;
+            top: 2px;
+            left: 4px;
+        }
+
+        .cell.active-i {
+            background-color: var(--i-color);
+            border-color: var(--i-border);
+        }
+
+        .cell.active-j {
+            background-color: var(--j-color);
+            border-color: var(--j-border);
+        }
+
+        .cell.active-i::after {
+            content: 'i';
+            position: absolute;
+            bottom: -20px;
+            color: var(--i-border);
+            font-size: 12px;
+        }
+
+        .cell.active-j::after {
+            content: 'j';
+            position: absolute;
+            bottom: -20px;
+            color: var(--j-border);
+            font-size: 12px;
+        }
+
+        .status-box {
+            background-color: #f1f3f5;
+            border-left: 5px solid var(--primary);
+            padding: 15px;
+            border-radius: 4px;
+            min-height: 60px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .step-counter {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Daily Temperatures Trace (O(1) Space Variant)</h2>
+    
+    <div class="step-counter" id="step-counter">Passo: 0 / 0</div>
+
+    <div class="controls">
+        <button id="prev-btn" onclick="prevStep()">◀ Indietro</button>
+        <button id="next-btn" onclick="nextStep()">Avanti ▶</button>
+        <button id="reset-btn" onclick="resetSim()">Reset</button>
+    </div>
+
+    <div class="array-container">
+        <div class="row">
+            <div class="row-label">Temperatures:</div>
+            <div class="cells" id="temp-cells"></div>
+        </div>
+        <div class="row" style="margin-top: 15px;">
+            <div class="row-label">Result (res):</div>
+            <div class="cells" id="res-cells"></div>
+        </div>
+    </div>
+
+    <div class="status-box" id="status-msg">
+        Clicca "Avanti" per iniziare la simulazione a ritroso dell'algoritmo.
+    </div>
+</div>
+
+<script>
+    const temperatures = [73, 74, 75, 71, 69, 72, 76, 73];
+    const n = temperatures.length;
+    let steps = [];
+    let currentStepIdx = 0;
+
+    function generateSteps() {
+        let res = Array(n).fill(0);
+        steps = [];
+
+        // Stato iniziale
+        steps.push({
+            i: null,
+            j: null,
+            res: [...res],
+            msg: "Inizializzazione del vettore dei risultati <code>res</code> con tutti 0. Iniziamo a iterare a ritroso partendo da <code>i = n - 2</code>."
+        });
+
+        for (let i = n - 2; i >= 0; i--) {
+            let j = i + 1;
+            steps.push({
+                i: i,
+                j: j,
+                res: [...res],
+                msg: `Prendiamo in esame <b>i = ${i}</b> (Temp: ${temperatures[i]}). Impostiamo il puntatore di confronto iniziale a <b>j = i + 1 = ${j}</b> (Temp: ${temperatures[j]}).`
+            });
+
+            while (j < n && temperatures[j] <= temperatures[i]) {
+                steps.push({
+                    i: i,
+                    j: j,
+                    res: [...res],
+                    msg: `Poiché la temperatura a j (${temperatures[j]}°) è minore o uguale a quella di i (${temperatures[i]}°), sfruttiamo i salti precalcolati.`
+                });
+
+                if (res[j] === 0) {
+                    steps.push({
+                        i: i,
+                        j: j,
+                        res: [...res],
+                        msg: `Trovato <code>res[j] == 0</code>. Significa che non esiste un giorno più caldo dopo il giorno j. Di conseguenza, non esisterà nemmeno per i attraverso questo percorso. Interrompiamo il ciclo.`
+                    });
+                    j = n;
+                    break;
+                }
+                
+                let oldJ = j;
+                j += res[j];
+                steps.push({
+                    i: i,
+                    j: j < n ? j : null,
+                    res: [...res],
+                    msg: `Facciamo un salto in avanti! Aggiorniamo <code>j += res[${oldJ}]</code> (${res[oldJ]}). Nuovo indice <b>j = ${j}</b>.`
+                });
+            }
+
+            if (j < n) {
+                res[i] = j - i;
+                steps.push({
+                    i: i,
+                    j: j,
+                    res: [...res],
+                    msg: `Trovato un giorno più caldo a <b>j = ${j}</b> (${temperatures[j]}° > ${temperatures[i]}°). Calcoliamo la distanza: <code>res[i] = j - i = ${j} - ${i} = ${j - i}</code>.`
+                });
+            } else {
+                steps.push({
+                    i: i,
+                    j: null,
+                    res: [...res],
+                    msg: `Nessun giorno più caldo trovato. L'indice j è uscito dai confini dell'array. <code>res[i]</code> rimane 0.`
+                });
+            }
+        }
+
+        steps.push({
+            i: null,
+            j: null,
+            res: [...res],
+            msg: "Algoritmo completato! Tutti gli indici sono stati processati a ritroso con successo."
+        });
+    }
+
+    function renderDOM() {
+        const tempContainer = document.getElementById('temp-cells');
+        const resContainer = document.getElementById('res-cells');
+        
+        tempContainer.innerHTML = '';
+        resContainer.innerHTML = '';
+
+        const currentState = steps[currentStepIdx];
+
+        for(let k = 0; k < n; k++) {
+            // Render Temperature Cell
+            const tCell = document.createElement('div');
+            tCell.className = 'cell';
+            tCell.innerHTML = `<span class="index">${k}</span>${temperatures[k]}`;
+            if (k === currentState.i) tCell.classList.add('active-i');
+            if (k === currentState.j) tCell.classList.add('active-j');
+            tempContainer.appendChild(tCell);
+
+            // Render Result Cell
+            const rCell = document.createElement('div');
+            rCell.className = 'cell';
+            rCell.innerHTML = `<span class="index">${k}</span>${currentState.res[k]}`;
+            if (k === currentState.i) rCell.classList.add('active-i');
+            resContainer.appendChild(rCell);
+        }
+
+        document.getElementById('status-msg').innerHTML = currentState.msg;
+        document.getElementById('step-counter').innerText = `Passo: ${currentStepIdx} / ${steps.length - 1}`;
+        
+        document.getElementById('prev-btn').disabled = currentStepIdx === 0;
+        document.getElementById('next-btn').disabled = currentStepIdx === steps.length - 1;
+    }
+
+    function nextStep() {
+        if (currentStepIdx < steps.length - 1) {
+            currentStepIdx++;
+            renderDOM();
+        }
+    }
+
+    function prevStep() {
+        if (currentStepIdx > 0) {
+            currentStepIdx--;
+            renderDOM();
+        }
+    }
+
+    function resetSim() {
+        currentStepIdx = 0;
+        renderDOM();
+    }
+
+    // Init
+    generateSteps();
+    renderDOM();
+</script>
+
+</body>
+</html>

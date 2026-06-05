@@ -51,4 +51,4 @@ class Solution:
 
         n = len(data)
         
-        return sorted(range(1, n + 1), key =lambda x: (data[x - 1], x)) #small coefficients to small data, large coefficient to large data
+        return sorted(range(1, n + 1), key =lambda x: (data[x - 1], x)) #small coefficients to small data, large coefficient to large data 
