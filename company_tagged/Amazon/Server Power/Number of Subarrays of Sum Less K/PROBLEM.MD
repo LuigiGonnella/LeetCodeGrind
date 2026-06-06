@@ -1,0 +1,1 @@
+- Given an array, find the number of sub-arrays whose max - min value <=k. 
