@@ -35,7 +35,7 @@ def find_bridges(graph, num_nodes):
                     bridges.append((node, neighbor))
 
 
-            elif discovery[neighbor] < discovery[node]: #BACKWORD EDGE  
+            elif discovery[neighbor] < discovery[node]: #!BACKWORD EDGE ONLY IF NOT DIRECTED
                 #update oldest reachable node since we got a backward edge
                 oldest[node] = min(oldest[node], discovery[neighbor])
     
