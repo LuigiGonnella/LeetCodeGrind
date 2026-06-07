@@ -5,9 +5,7 @@ class Solution:
         
         left = [0] * n
         stack = [-1] #stack will never be empty --> if i pop -1 will correctly count A[j] to delete from the running sum (pop 0 and remains -1)
-        curr = 0 #running sum treating each eleemnt as the peak, then if we increase window and another new minimum gets in, we must delete
-        #the old sum of the last stint (previous minimum - previous previous minimum) and add this one (new minimum - previous previous minimum that now is the previous minimum)
-
+        curr = 0 #running sum from CURRENT INDEX to PREVIOUS INDEX CONTAINING A SMALLER OR EQUAL VALUE --> mantengo proprieta di PICCO, tratto ognuno come se fosse PICCO (alla fine il PICCO reale avra la somma maggiore tra left e right)
         #we compute the running sum for each element assuming it is the peak (real peak will have final sum as the biggest)
         for idx in range(n):
 
