@@ -15,7 +15,6 @@ class Solution:
 
         for k in counter:
             equal_pairs = k * (k - 1) // 2
-
             disitnct_pairs -= equal_pairs
         
         return disitnct_pairs + 1 #the original password
