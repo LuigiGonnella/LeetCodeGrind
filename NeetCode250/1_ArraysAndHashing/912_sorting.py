@@ -5,7 +5,7 @@ class Solution:
         n = len(nums)
 
         def getLeft(i):
-                return 2 * i + 1
+            return 2 * i + 1
 
         def getRight(i):
             return 2 * i + 2
